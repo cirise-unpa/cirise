@@ -56,11 +56,12 @@
 	var capaActual = 0;
 	var mbAttr = '2018 &copy; <a href="http://www.unpa.edu.ar/">Universidad Nacional de la Patagonia Austral</a> ',
 		mbUrl = 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
-	var map = L.map('map', {center: [-46.146472, -67.313686],zoom: 10});	
+	var map = L.map('map', {center: [-46.280103, -68.074074],zoom: 9});	
 	var CalOli = L.tileLayer(mbUrl, {attribution: mbAttr});
 	var Golfo = L.tileLayer(mbUrl, {attribution: mbAttr}).addTo(map);
 	var ComRiv = L.tileLayer(mbUrl, {attribution: mbAttr});
-	
+	var PicTru = L.tileLayer(mbUrl, {attribution: mbAttr});
+	var LasHer = L.tileLayer(mbUrl, {attribution: mbAttr});
 	
 	var info = L.control();
 	var legendCR = L.control({position: 'bottomright'});
@@ -263,6 +264,8 @@
 	});
 	var yyy = L.geoJSON();//.addTo(map);
 	var xxx = L.geoJSON();//.addTo(map);
+	var www = L.geoJSON();//.addTo(map);
+	var vvv = L.geoJSON();//.addTo(map);
 	//LEGENDA CR
 	legendCR.onAdd = function (map) 
 	{
@@ -317,6 +320,11 @@
     var pulsingIconCO = L.icon.pulse({iconSize:[14,14],color:'blue'});
     var pulsoCO = L.marker([-46.466241, -67.538452],{icon: pulsingIconCO,title: 'Caleta Olivia'}).addTo(map);
 
+	var pulsingIconCO = L.icon.pulse({iconSize:[14,14],color:'blue'});
+    var pulsoPT = L.marker([-46.800238,-67.960000],{icon: pulsingIconCO,title: 'Pico Truncado'}).addTo(map);
+	
+	var pulsingIconCO = L.icon.pulse({iconSize:[14,14],color:'blue'});
+    var pulsoLH = L.marker([-46.540000,-68.930000],{icon: pulsingIconCO,title: 'Las Heras'}).addTo(map);
   
 	
 	var popup = L.popup();
@@ -325,6 +333,8 @@
 	{
 			"Escuelas Comodoro Rivadavia": escuCR, 
 			"Escuelas Caleta Olivia": escuCO,
+			//"Escuelas Pico Truncado": escuPT,
+			//"Escuelas Las Heras": escuLH,
 			"NBI CO": geojsonCO, 
 			"NBI CR": geojsonCR 
 	};
@@ -370,14 +380,57 @@
 				}
 			)
 		}
-		else if (eo.name === 'Golfo San Jorge')
+		else if (eo.name === 'Pico Truncado')
+		{
+			setTimeout
+			(
+				function()
+				{
+					capaActual = 3;
+					map.setView([-46.800238,-67.960000], 13);
+					//legendCO.addTo(map);	
+					//geojsonCO.addTo(map);
+					//escuCO.addTo(map);
+					//geojsonCO.addTo(map);
+					legendCR.remove();
+					legendCO.remove();
+					
+					yyy.addTo(map);
+					xxx.addTo(map);
+					pulsoPT.remove();
+				}
+			)
+		}
+		else if (eo.name === 'Las Heras')
+		{
+			setTimeout
+			(
+				function()
+				{
+					capaActual = 4;
+					map.setView([-46.540000,-68.930000], 13);
+					//legendCO.addTo(map);	
+					//geojsonCO.addTo(map);
+					//escuCO.addTo(map);
+					//geojsonCO.addTo(map);
+					legendCR.remove();
+					legendCO.remove();
+					
+					yyy.addTo(map);
+					xxx.addTo(map);
+					pulsoLH.remove();
+				}
+			)
+		}
+		else if
+		(eo.name === 'VISTA GENERAL')
 		{
 			setTimeout
 			(
 				function()
 				{
 					capaActual = 0;
-					map.setView([-46.146472, -67.313686], 10);
+					map.setView([-46.280103, -68.074074], 9);
 					legendCR.remove();
 					legendCO.remove();
 					escuCO.remove();
@@ -388,10 +441,12 @@
 					xxx.remove();
 					pulsoCR.addTo(map);
 					pulsoCO.addTo(map);
+					pulsoPT.addTo(map);
+					pulsoLH.addTo(map);
 				}
 			)
 		}
-		else if (eo.name === 'Educacion')
+		else if (eo.name === 'Escuelas')
 		{
 			setTimeout
 			(
@@ -467,7 +522,7 @@
 
 	map.on('overlayremove', function (oa) 
 	{
-		if (oa.name === "Educacion")
+		if (oa.name === "Escuelas")
 		{
 			setTimeout
 			(
@@ -533,11 +588,16 @@
 	var groups = { escuCR, escuCO};
   
     var groupedOverlays = {
-	"<a style='color: #004d95;font: 18px Arial, Helvetica, sans-serif;'>Zona</a>": {'Comodoro Rivadavia':ComRiv, 'Caleta Olivia':CalOli, 'Golfo San Jorge':Golfo},
-      "<br><a style='color: #004d95;font: 18px Arial, Helvetica, sans-serif;'>Datos</a>": {
-        "Educacion": xxx,
+	"<a style='color: #004d95;font: 18px Arial, Helvetica, sans-serif;'>Zona</a>": {'Comodoro Rivadavia':ComRiv, 'Caleta Olivia':CalOli, 'Pico Truncado':PicTru, 'Las Heras':LasHer,'VISTA GENERAL':Golfo},
+      "<br><a style='color: #004d95;font: 18px Arial, Helvetica, sans-serif;'>Datos educativos</a>": {
+        "Escuelas": xxx,
+        "Matrículas": vvv,
+		"Orientaciones": www
+      },
+	  "<br><a style='color: #004d95;font: 18px Arial, Helvetica, sans-serif;'>Datos sociales</a>": {
+        //"Educacion": xxx,
         "NBI": yyy
-      }
+      },
     };
 
     var options = {
